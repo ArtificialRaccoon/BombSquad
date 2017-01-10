@@ -1,0 +1,140 @@
+﻿<Window x:Class="BombSquad.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:BombSquad"
+        xmlns:DataConverters="clr-namespace:BombSquad.DataConverters"
+        xmlns:Enumerations="clr-namespace:BombSquad.Enumerations"
+        Icon="Images/Bomb16x16.png" WindowStartupLocation="CenterScreen"
+        Title="Bomb Squad" Height="320" Width="480" ResizeMode="NoResize">
+    <Window.Resources>
+        <DataConverters:InputToSolidColorBrushConverter x:Key="InputToSolidColorBrushConverter"/>
+        <DataConverters:DefuseAttemptToCorrectPositionCount x:Key="DefuseAttemptToCorrectPositionCount"/>
+        <DataConverters:DefuseAttemptToCorrectColoursCount x:Key="DefuseAttemptToCorrectColoursCount"/>
+        <DataConverters:ConfigurationToVisibilityConverter x:Key="ConfigurationToVisibilityConverter"/>
+        <ObjectDataProvider x:Key="InputEnumerations" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="Enumerations:InputEnum"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ToolBar Grid.Row="0">
+            <Button Command="{x:Static local:MainWindow.NewGameCommand}" ToolTip="New Game">
+                <Canvas Height="16" Width="16">
+                    <Image Source="Images/Bomb16x16.png"/>
+                    <Image Source="Images/New16x16.png"/>
+                </Canvas>
+            </Button>
+            <Button Command="{x:Static local:MainWindow.ConfigurationCommand}" ToolTip="Configure Game">
+                <Image Source="Images/Gear16x16.png"/>
+            </Button>
+        </ToolBar>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ListBox Name="lbAttempts" Grid.Row="0" ItemsSource="{Binding DefuseAttempts}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible" Width="200">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Ellipse Grid.Column="0" Width="16" Height="16" Stroke="Black" Fill="{Binding InputOne, Converter={StaticResource InputToSolidColorBrushConverter}}"/>
+                                <Ellipse Grid.Column="1" Width="16" Height="16" Stroke="Black" Fill="{Binding InputTwo, Converter={StaticResource InputToSolidColorBrushConverter}}"/>
+                                <Ellipse Grid.Column="2" Width="16" Height="16" Stroke="Black" Fill="{Binding InputThree, Converter={StaticResource InputToSolidColorBrushConverter}}"/>
+                                <Ellipse Grid.Column="3" Width="16" Height="16" Stroke="Black" Fill="{Binding InputFour, Converter={StaticResource InputToSolidColorBrushConverter}}"/>
+                                <Ellipse Grid.Column="4" Width="16" Height="16" Stroke="Black" Fill="{Binding InputFive, Converter={StaticResource InputToSolidColorBrushConverter}}">
+                                    <Ellipse.Visibility>
+                                        <Binding Path="DataContext.InputSolution" RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Converter="{StaticResource ConfigurationToVisibilityConverter}" ConverterParameter="5"/>
+                                    </Ellipse.Visibility>
+                                </Ellipse>
+                                <Ellipse Grid.Column="5" Width="16" Height="16" Stroke="Black" Fill="{Binding InputSix, Converter={StaticResource InputToSolidColorBrushConverter}}">
+                                    <Ellipse.Visibility>
+                                        <Binding Path="DataContext.InputSolution" RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Converter="{StaticResource ConfigurationToVisibilityConverter}" ConverterParameter="6"/>
+                                    </Ellipse.Visibility>
+                                </Ellipse>
+                                <Label Grid.Column="7">
+                                    <Label.Content>
+                                        <MultiBinding Converter="{StaticResource DefuseAttemptToCorrectPositionCount}">
+                                            <Binding Path="CurrentInput"/>
+                                            <Binding Path="DataContext.InputSolution" RelativeSource="{RelativeSource AncestorType={x:Type Window}}"/>
+                                        </MultiBinding>
+                                    </Label.Content>
+                                </Label>
+                                <Label Grid.Column="8">
+                                    <Label.Content>
+                                        <MultiBinding Converter="{StaticResource DefuseAttemptToCorrectColoursCount}">
+                                            <Binding Path="CurrentInput"/>
+                                            <Binding Path="DataContext.InputSolution" RelativeSource="{RelativeSource AncestorType={x:Type Window}}"/>
+                                        </MultiBinding>
+                                    </Label.Content>
+                                </Label>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Command="{x:Static local:MainWindow.PressBombButtonCommand}" CommandParameter="{x:Static Enumerations:InputEnum.Blue}">
+                        <Ellipse Width="16" Height="16" Fill="Blue" Stroke="Black"/>
+                    </Button>
+                    <Button Grid.Column="1" Command="{x:Static local:MainWindow.PressBombButtonCommand}" CommandParameter="{x:Static Enumerations:InputEnum.Red}">
+                        <Ellipse Width="16" Height="16" Fill="Red" Stroke="Black"/>
+                    </Button>
+                    <Button Grid.Column="2" Command="{x:Static local:MainWindow.PressBombButtonCommand}" CommandParameter="{x:Static Enumerations:InputEnum.Yellow}">
+                        <Ellipse Width="16" Height="16" Fill="Gold" Stroke="Black"/>
+                    </Button>
+                    <Button Grid.Column="3" Command="{x:Static local:MainWindow.PressBombButtonCommand}" CommandParameter="{x:Static Enumerations:InputEnum.Green}">
+                        <Ellipse Width="16" Height="16" Fill="Green" Stroke="Black"/>
+                    </Button>
+                    <Button Grid.Column="4" Command="{x:Static local:MainWindow.PressBombButtonCommand}" CommandParameter="{x:Static Enumerations:InputEnum.Purple}">
+                        <Ellipse Width="16" Height="16" Fill="Purple" Stroke="Black"/>
+                    </Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" FontFamily="Consolas" Name="txtTimer" Foreground="Red" Background="Black" VerticalContentAlignment="Center" Margin="5" BorderThickness="5" BorderBrush="Green">
+                    <Viewbox>
+                        <TextBlock Text="{Binding TimeRemaining}"/>
+                    </Viewbox>
+                </Label>
+                <Label Grid.Row="1" VerticalContentAlignment="Center" Margin="5">
+                    <Viewbox>
+                        <TextBlock Text="{Binding GameStatus}"/>
+                    </Viewbox>
+                </Label>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

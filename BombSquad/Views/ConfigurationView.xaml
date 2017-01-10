@@ -1,0 +1,53 @@
+﻿<Window x:Class="BombSquad.Views.ConfigurationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        SizeToContent="Height" WindowStartupLocation="CenterOwner"
+        Icon="Images/Gear16x16.png"
+        Title="Bomb Squad - Configuration" Width="300">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="0,0,0,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Maximum Number of Attempts: "/>
+            <xctk:ButtonSpinner Name="spnAttempts" Grid.Column="1" Spin="spnAttempts_Spin">
+                <TextBlock Text="{Binding MaxAttempts}" />
+            </xctk:ButtonSpinner>
+        </Grid>
+        <Grid Grid.Row="1" Margin="0,0,0,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Maximum Time Allowed: "/>
+            <xctk:ButtonSpinner Name="spnMaxTime" Grid.Column="1" Spin="spnMaxTime_Spin">
+                <TextBlock Text="{Binding DefaultStartTime}"/>
+            </xctk:ButtonSpinner>
+        </Grid>
+        <Grid Grid.Row="2" Margin="0,0,0,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Defuse Code Length: "/>
+            <xctk:ButtonSpinner Name="spnCodeLength" Grid.Column="1" Spin="spnCodeLength_Spin">
+                <TextBlock Text="{Binding CodeLength}"/>
+            </xctk:ButtonSpinner>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="2" Content="OK" Width="75" IsCancel="True" IsDefault="True" Margin="0,5,0,0"/>
+        </Grid>
+    </Grid>
+</Window>
